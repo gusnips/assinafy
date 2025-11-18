@@ -7,6 +7,7 @@ import type {
     ICreateSignerPayload,
     ICreateSignerResponse,
     ISignerListResponse,
+    IUpdateSignerPayload,
     ICreateAssignmentPayload,
     ICreateAssignmentResponse,
     IResendEmailResponse,
@@ -104,6 +105,20 @@ export class AssinafyClient {
      */
     async listSigners(search?: string): Promise<ISignerListResponse> {
         return this.signers.list(search);
+    }
+
+    /**
+     * Atualiza um signatário na conta.
+     */
+    async updateSigner(signerId: string, signerData: IUpdateSignerPayload): Promise<ICreateSignerResponse> {
+        return this.signers.update(signerId, signerData);
+    }
+
+    /**
+     * Deleta um signatário da conta.
+     */
+    async deleteSigner(signerId: string): Promise<void> {
+        return this.signers.delete(signerId);
     }
 
     /**

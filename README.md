@@ -1,4 +1,4 @@
-# Assinafy SDK
+# Assinafy
 
 TypeScript SDK for the Assinafy API - A digital signature platform for Brazil.
 
@@ -68,6 +68,8 @@ const client = new AssinafyClient({
 
 - `create(data: ICreateSignerPayload)` - Create a new signer
 - `list(search?: string)` - List signers with optional search
+- `update(signerId: string, data: IUpdateSignerPayload)` - Update a signer (only if not associated with active documents)
+- `delete(signerId: string)` - Delete a signer
 
 ## Development
 

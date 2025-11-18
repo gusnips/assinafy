@@ -20,6 +20,12 @@ export interface ICreateSignerPayload {
     email: string;
 }
 
+/** Interface para atualizar um signatário na conta. */
+export interface IUpdateSignerPayload {
+    full_name?: string;
+    email?: string;
+}
+
 /** Interface para a resposta de criação de signatário. */
 export interface ICreateSignerResponse {
     resource: string;

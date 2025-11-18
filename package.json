@@ -1,15 +1,15 @@
 {
     "name": "assinafy",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "TypeScript SDK for Assinafy API - Digital signature platform",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
     "exports": {
         ".": {
+            "types": "./dist/index.d.ts",
             "import": "./dist/index.mjs",
-            "require": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "require": "./dist/index.js"
         }
     },
     "scripts": {
@@ -18,6 +18,7 @@
         "lint": "eslint src --ext .ts",
         "lint:fix": "eslint src --ext .ts --fix",
         "prepublishOnly": "bun run build",
+        "release": "bun run build && bun test && bun lint && bun typecheck && bun run build && npm publish",
         "typecheck": "tsc --noEmit"
     },
     "keywords": [
@@ -30,6 +31,14 @@
     ],
     "author": "",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gusnips/assinafy.git"
+    },
+    "bugs": {
+        "url": "https://github.com/gusnips/assinafy/issues"
+    },
+    "homepage": "https://github.com/gusnips/assinafy#readme",
     "devDependencies": {
         "@types/bun": "latest",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
