@@ -71,6 +71,14 @@ const client = new AssinafyClient({
 - `update(signerId: string, data: IUpdateSignerPayload)` - Update a signer (only if not associated with active documents)
 - `delete(signerId: string)` - Delete a signer
 
+### Workspaces
+
+- `create(data: ICreateWorkspacePayload)` - Create a new workspace
+- `list()` - List all workspaces (ordered by last interaction)
+- `get(accountId: string)` - Get workspace details
+- `update(accountId: string, data: IUpdateWorkspacePayload)` - Update a workspace
+- `delete(accountId: string)` - Delete a workspace
+
 ## Development
 
 ```bash

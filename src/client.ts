@@ -11,9 +11,14 @@ import type {
     ICreateAssignmentPayload,
     ICreateAssignmentResponse,
     IResendEmailResponse,
+    ICreateWorkspacePayload,
+    IWorkspaceResponse,
+    IWorkspaceListResponse,
+    IUpdateWorkspacePayload,
 } from './types';
 import { DocumentResource } from './resources/documents';
 import { SignerResource } from './resources/signers';
+import { WorkspaceResource } from './resources/workspaces';
 
 const ASSINAFY_API_URL = 'https://api.assinafy.com.br/v1/';
 
@@ -35,6 +40,7 @@ export class AssinafyClient {
     private accountId: string;
     public readonly documents: DocumentResource;
     public readonly signers: SignerResource;
+    public readonly workspaces: WorkspaceResource;
 
     constructor(options: AssinafyClientOptions) {
         if (!options.token) {
@@ -53,6 +59,7 @@ export class AssinafyClient {
 
         this.documents = new DocumentResource(this.axiosInstance, this.accountId);
         this.signers = new SignerResource(this.axiosInstance, this.accountId);
+        this.workspaces = new WorkspaceResource(this.axiosInstance);
     }
 
     /**
@@ -140,5 +147,40 @@ export class AssinafyClient {
         signerId: string,
     ): Promise<IResendEmailResponse> {
         return this.documents.resendSignerEmail(documentId, assignmentId, signerId);
+    }
+
+    /**
+     * Cria um novo workspace.
+     */
+    async createWorkspace(workspaceData: ICreateWorkspacePayload): Promise<IWorkspaceResponse> {
+        return this.workspaces.create(workspaceData);
+    }
+
+    /**
+     * Lista os workspaces do usuário.
+     */
+    async listWorkspaces(): Promise<IWorkspaceListResponse> {
+        return this.workspaces.list();
+    }
+
+    /**
+     * Busca os dados de um workspace específico.
+     */
+    async getWorkspace(accountId: string): Promise<IWorkspaceResponse> {
+        return this.workspaces.get(accountId);
+    }
+
+    /**
+     * Atualiza um workspace.
+     */
+    async updateWorkspace(accountId: string, workspaceData: IUpdateWorkspacePayload): Promise<IWorkspaceResponse> {
+        return this.workspaces.update(accountId, workspaceData);
+    }
+
+    /**
+     * Deleta um workspace.
+     */
+    async deleteWorkspace(accountId: string): Promise<void> {
+        return this.workspaces.delete(accountId);
     }
 }

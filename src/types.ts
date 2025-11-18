@@ -204,6 +204,43 @@ export interface IDocumentDetailsResponse {
     }>;
 }
 
+/** Interface para criar um workspace. */
+export interface ICreateWorkspacePayload {
+    name: string;
+    primary_color?: string;
+    secondary_color?: string;
+}
+
+/** Interface para atualizar um workspace. */
+export interface IUpdateWorkspacePayload {
+    name?: string;
+    primary_color?: string | null;
+    secondary_color?: string | null;
+}
+
+/** Interface para a resposta de um workspace. */
+export interface IWorkspaceResponse {
+    id: string;
+    name: string;
+    primary_color?: string;
+    secondary_color?: string;
+    created_at: string;
+}
+
+/** Interface para um workspace na resposta de listagem. */
+export interface IWorkspaceListItem {
+    id: string;
+    name: string;
+    is_delete_allowed: boolean;
+    roles: string[];
+    created_at: string;
+}
+
+/** Interface para a resposta do endpoint de listagem de workspaces. */
+export interface IWorkspaceListResponse {
+    data: IWorkspaceListItem[];
+}
+
 /** Client configuration options */
 export interface AssinafyClientOptions {
     token: string;
