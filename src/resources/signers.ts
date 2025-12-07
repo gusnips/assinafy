@@ -11,16 +11,25 @@ import { formatAxiosError, handleAssinafyResponse } from '../utils';
 export class SignerResource {
     constructor(
         private axiosInstance: AxiosInstance,
-        private accountId: string,
+        private defaultAccountId?: string,
     ) { }
+
+    private resolveAccountId(accountId?: string): string {
+        const resolved = accountId ?? this.defaultAccountId;
+        if (!resolved) {
+            throw new Error('Account ID is required. Provide it as a parameter or set a default in the client.');
+        }
+        return resolved;
+    }
 
     /**
      * Cria um signatário na conta.
      */
-    async create(signerData: ICreateSignerPayload): Promise<ICreateSignerResponse> {
+    async create(signerData: ICreateSignerPayload, accountId?: string): Promise<ICreateSignerResponse> {
         try {
+            const resolvedAccountId = this.resolveAccountId(accountId);
             const response = await this.axiosInstance.post<ICreateSignerResponse>(
-                `/accounts/${this.accountId}/signers`,
+                `/accounts/${resolvedAccountId}/signers`,
                 signerData,
             );
 
@@ -37,15 +46,16 @@ export class SignerResource {
     /**
      * Lista os signatários da conta.
      */
-    async list(search?: string): Promise<ISignerListResponse> {
+    async list(search?: string, accountId?: string): Promise<ISignerListResponse> {
         try {
+            const resolvedAccountId = this.resolveAccountId(accountId);
             const params: Record<string, string> = {};
             if (search) {
                 params.search = search;
             }
 
             const response = await this.axiosInstance.get<ISignerListResponse>(
-                `/accounts/${this.accountId}/signers`,
+                `/accounts/${resolvedAccountId}/signers`,
                 { params },
             );
 
@@ -63,14 +73,15 @@ export class SignerResource {
      * Atualiza um signatário na conta.
      * Importante: Um signatário só pode ser atualizado se não estiver associado a nenhum documento ativo.
      */
-    async update(signerId: string, signerData: IUpdateSignerPayload): Promise<ICreateSignerResponse> {
+    async update(signerId: string, signerData: IUpdateSignerPayload, accountId?: string): Promise<ICreateSignerResponse> {
         try {
             if (!signerId) {
                 throw new Error('Signer ID is required for updating');
             }
 
+            const resolvedAccountId = this.resolveAccountId(accountId);
             const response = await this.axiosInstance.put<ICreateSignerResponse>(
-                `/accounts/${this.accountId}/signers/${signerId}`,
+                `/accounts/${resolvedAccountId}/signers/${signerId}`,
                 signerData,
             );
 
@@ -87,13 +98,14 @@ export class SignerResource {
     /**
      * Deleta um signatário da conta.
      */
-    async delete(signerId: string): Promise<void> {
+    async delete(signerId: string, accountId?: string): Promise<void> {
         try {
             if (!signerId) {
                 throw new Error('Signer ID is required for deletion');
             }
 
-            const response = await this.axiosInstance.delete(`/accounts/${this.accountId}/signers/${signerId}`);
+            const resolvedAccountId = this.resolveAccountId(accountId);
+            const response = await this.axiosInstance.delete(`/accounts/${resolvedAccountId}/signers/${signerId}`);
 
             if (response.status !== 200) {
                 throw new Error(`Failed to delete signer: HTTP ${response.status}`);

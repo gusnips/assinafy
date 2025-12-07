@@ -48,16 +48,37 @@ const signedPdf = await client.documents.download(document.id, 'certificated');
 
 ```typescript
 const client = new AssinafyClient({
-  token: string;      // Required: Your Assinafy API token
-  accountId: string;  // Required: Your account ID
-  baseUrl?: string;   // Optional: Custom API base URL
+  token: string;       // Required: Your Assinafy API token
+  accountId?: string;  // Optional: Default account ID for all operations
+  baseUrl?: string;    // Optional: Custom API base URL
 });
+```
+
+### Multi-Account Support
+
+All methods that require an account ID accept an optional `accountId` parameter to override the default:
+
+```typescript
+// Using default account ID
+const client = new AssinafyClient({
+  token: 'your-token',
+  accountId: 'default-account'
+});
+await client.documents.upload(buffer, 'file.pdf');
+
+// Override for specific calls
+await client.documents.upload(buffer, 'file.pdf', 'other-account');
+await client.signers.list(undefined, 'other-account');
+
+// Without default account ID (must provide per-call)
+const client = new AssinafyClient({ token: 'your-token' });
+await client.documents.upload(buffer, 'file.pdf', 'account-123'); // required
 ```
 
 ### Documents
 
-- `upload(buffer: Buffer, fileName: string)` - Upload a PDF document
-- `list()` - List all documents
+- `upload(buffer: Buffer, fileName: string, accountId?: string)` - Upload a PDF document
+- `list(accountId?: string)` - List all documents
 - `details(documentId: string)` - Get document details
 - `download(documentId: string, artifactName?)` - Download document artifact
 - `delete(documentId: string)` - Delete a document
@@ -66,10 +87,10 @@ const client = new AssinafyClient({
 
 ### Signers
 
-- `create(data: ICreateSignerPayload)` - Create a new signer
-- `list(search?: string)` - List signers with optional search
-- `update(signerId: string, data: IUpdateSignerPayload)` - Update a signer (only if not associated with active documents)
-- `delete(signerId: string)` - Delete a signer
+- `create(data: ICreateSignerPayload, accountId?: string)` - Create a new signer
+- `list(search?: string, accountId?: string)` - List signers with optional search
+- `update(signerId: string, data: IUpdateSignerPayload, accountId?: string)` - Update a signer (only if not associated with active documents)
+- `delete(signerId: string, accountId?: string)` - Delete a signer
 
 ### Workspaces
 

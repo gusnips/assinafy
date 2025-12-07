@@ -13,20 +13,29 @@ import { formatAxiosError, handleAssinafyResponse } from '../utils';
 export class DocumentResource {
     constructor(
         private axiosInstance: AxiosInstance,
-        private accountId: string,
+        private defaultAccountId?: string,
     ) { }
+
+    private resolveAccountId(accountId?: string): string {
+        const resolved = accountId ?? this.defaultAccountId;
+        if (!resolved) {
+            throw new Error('Account ID is required. Provide it as a parameter or set a default in the client.');
+        }
+        return resolved;
+    }
 
     /**
      * Realiza o upload de um documento PDF para a plataforma.
      */
-    async upload(pdfBuffer: Buffer, fileName: string): Promise<IDocumentUploadResponse> {
+    async upload(pdfBuffer: Buffer, fileName: string, accountId?: string): Promise<IDocumentUploadResponse> {
         try {
+            const resolvedAccountId = this.resolveAccountId(accountId);
             const formData = new FormData();
             const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
             formData.append('file', blob, fileName);
 
             const response = await this.axiosInstance.post<IDocumentUploadResponse>(
-                `/accounts/${this.accountId}/documents`,
+                `/accounts/${resolvedAccountId}/documents`,
                 formData,
                 {
                     headers: {
@@ -54,9 +63,10 @@ export class DocumentResource {
     /**
      * Lista os documentos da conta.
      */
-    async list(): Promise<IDocumentListResponse> {
+    async list(accountId?: string): Promise<IDocumentListResponse> {
+        const resolvedAccountId = this.resolveAccountId(accountId);
         const response = await this.axiosInstance.get<IDocumentListResponse>(
-            `/accounts/${this.accountId}/documents`,
+            `/accounts/${resolvedAccountId}/documents`,
         );
         return response.data;
     }

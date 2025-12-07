@@ -244,6 +244,6 @@ export interface IWorkspaceListResponse {
 /** Client configuration options */
 export interface AssinafyClientOptions {
     token: string;
-    accountId: string;
+    accountId?: string;
     baseUrl?: string;
 }

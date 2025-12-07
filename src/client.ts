@@ -37,7 +37,7 @@ const ASSINAFY_API_URL = 'https://api.assinafy.com.br/v1/';
  */
 export class AssinafyClient {
     private axiosInstance: AxiosInstance;
-    private accountId: string;
+    private defaultAccountId?: string;
     public readonly documents: DocumentResource;
     public readonly signers: SignerResource;
     public readonly workspaces: WorkspaceResource;
@@ -47,7 +47,7 @@ export class AssinafyClient {
             throw new Error('O Token da API da Assinafy é obrigatório.');
         }
 
-        this.accountId = options.accountId;
+        this.defaultAccountId = options.accountId;
         this.axiosInstance = axios.create({
             baseURL: options.baseUrl ?? ASSINAFY_API_URL,
             headers: {
@@ -57,16 +57,16 @@ export class AssinafyClient {
             },
         });
 
-        this.documents = new DocumentResource(this.axiosInstance, this.accountId);
-        this.signers = new SignerResource(this.axiosInstance, this.accountId);
+        this.documents = new DocumentResource(this.axiosInstance, this.defaultAccountId);
+        this.signers = new SignerResource(this.axiosInstance, this.defaultAccountId);
         this.workspaces = new WorkspaceResource(this.axiosInstance);
     }
 
     /**
      * Realiza o upload de um documento PDF para a plataforma.
      */
-    async uploadDocument(pdfBuffer: Buffer, fileName: string): Promise<IDocumentUploadResponse> {
-        return this.documents.upload(pdfBuffer, fileName);
+    async uploadDocument(pdfBuffer: Buffer, fileName: string, accountId?: string): Promise<IDocumentUploadResponse> {
+        return this.documents.upload(pdfBuffer, fileName, accountId);
     }
 
     /**
@@ -96,36 +96,36 @@ export class AssinafyClient {
     /**
      * Lista os documentos da conta.
      */
-    async listDocuments(): Promise<IDocumentListResponse> {
-        return this.documents.list();
+    async listDocuments(accountId?: string): Promise<IDocumentListResponse> {
+        return this.documents.list(accountId);
     }
 
     /**
      * Cria um signatário na conta Assinafy.
      */
-    async createSigner(signerData: ICreateSignerPayload): Promise<ICreateSignerResponse> {
-        return this.signers.create(signerData);
+    async createSigner(signerData: ICreateSignerPayload, accountId?: string): Promise<ICreateSignerResponse> {
+        return this.signers.create(signerData, accountId);
     }
 
     /**
      * Lista os signatários da conta.
      */
-    async listSigners(search?: string): Promise<ISignerListResponse> {
-        return this.signers.list(search);
+    async listSigners(search?: string, accountId?: string): Promise<ISignerListResponse> {
+        return this.signers.list(search, accountId);
     }
 
     /**
      * Atualiza um signatário na conta.
      */
-    async updateSigner(signerId: string, signerData: IUpdateSignerPayload): Promise<ICreateSignerResponse> {
-        return this.signers.update(signerId, signerData);
+    async updateSigner(signerId: string, signerData: IUpdateSignerPayload, accountId?: string): Promise<ICreateSignerResponse> {
+        return this.signers.update(signerId, signerData, accountId);
     }
 
     /**
      * Deleta um signatário da conta.
      */
-    async deleteSigner(signerId: string): Promise<void> {
-        return this.signers.delete(signerId);
+    async deleteSigner(signerId: string, accountId?: string): Promise<void> {
+        return this.signers.delete(signerId, accountId);
     }
 
     /**

@@ -29,4 +29,15 @@ describe('AssinafyClient', () => {
 
         expect(client).toBeDefined();
     });
+
+    test('should create client without accountId', () => {
+        const client = new AssinafyClient({
+            token: 'test-token',
+        });
+
+        expect(client).toBeDefined();
+        expect(client.documents).toBeDefined();
+        expect(client.signers).toBeDefined();
+        expect(client.workspaces).toBeDefined();
+    });
 });
