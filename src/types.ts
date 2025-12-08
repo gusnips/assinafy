@@ -39,18 +39,11 @@ export interface ISignerListItem {
     id: string;
     full_name: string;
     email: string;
+    has_accepted_terms: boolean;
 }
 
-/** Interface para a resposta do endpoint de listagem de signatários. */
-export interface ISignerListResponse {
-    data: ISignerListItem[];
-    meta?: {
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
-    };
-}
+/** Type para a resposta do endpoint de listagem de signatários (após extração pelo handleAssinafyResponse). */
+export type ISignerListResponse = ISignerListItem[];
 
 /** Interface para criar uma atribuição/assignment. */
 export interface ICreateAssignmentPayload {
