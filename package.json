@@ -1,5 +1,6 @@
 {
     "name": "assinafy",
+    "packageManager": "bun@1.4.2",
     "version": "1.0.4",
     "description": "TypeScript SDK for Assinafy API - Digital signature platform",
     "main": "dist/index.js",
