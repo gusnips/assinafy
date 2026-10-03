@@ -1,17 +1,24 @@
 {
+    "root": true,
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2020,
         "sourceType": "module"
     },
-    "plugins": [
-        "@typescript-eslint"
-    ],
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
+    "plugins": ["@typescript-eslint"],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
     "rules": {
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "Literal[value=/\\u2014/]",
+                "message": "No em dash in user-facing text. Use a period, comma, colon or parentheses."
+            },
+            {
+                "selector": "TemplateElement[value.cooked=/\\u2014/]",
+                "message": "No em dash in user-facing text. Use a period, comma, colon or parentheses."
+            }
+        ],
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-unused-vars": [
@@ -21,6 +28,12 @@
             }
         ]
     },
+    "overrides": [
+        {
+            "files": ["**/*.test.ts"],
+            "rules": { "no-restricted-syntax": "off" }
+        }
+    ],
     "env": {
         "node": true,
         "es2020": true
