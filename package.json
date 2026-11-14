@@ -16,8 +16,8 @@
     "scripts": {
         "build": "tsup src/index.ts --format cjs,esm --dts --clean",
         "test": "bun test",
-        "lint": "eslint src --ext .ts",
-        "lint:fix": "eslint src --ext .ts --fix",
+        "lint": "oxlint src",
+        "lint:fix": "oxlint src --fix",
         "prepublishOnly": "bun run build",
         "release": "bun run build && bun test && bun lint && bun typecheck && bun run build && npm publish",
         "typecheck": "tsc --noEmit"
@@ -41,10 +41,9 @@
     },
     "homepage": "https://github.com/gusnips/assinafy#readme",
     "devDependencies": {
+        "@gusnips/oxlint": "^0.2.0",
         "@types/bun": "latest",
-        "@typescript-eslint/eslint-plugin": "^6.0.0",
-        "@typescript-eslint/parser": "^6.0.0",
-        "eslint": "^8.0.0",
+        "oxlint": "1.93.0",
         "tsup": "^8.0.0",
         "typescript": "^5.0.0"
     },
