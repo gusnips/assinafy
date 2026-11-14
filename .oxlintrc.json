@@ -1,0 +1,13 @@
+{
+  // The preset holds the lint core. This file adds what the old ESLint config had on top.
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./node_modules/@gusnips/oxlint/base.json"],
+  "plugins": [],
+  "rules": {
+    // The repo's own level: `any` warns.
+    "typescript/no-explicit-any": "warn",
+
+    // eslint:recommended in ESLint 8, outside oxlint's `correctness`.
+    "no-inner-declarations": "error"
+  }
+}
